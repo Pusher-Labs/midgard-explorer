@@ -8,6 +8,7 @@ import { ExplorerComponent } from './explorer/explorer.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ExplorerUiComponent } from './explorer-ui/explorer-ui.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,12 @@ import { ExplorerUiComponent } from './explorer-ui/explorer-ui.component';
     FooterComponent,
     ExplorerUiComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FontAwesomeModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
