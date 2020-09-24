@@ -1,10 +1,14 @@
-<div class="explorer-ui">
+<div class="explorer-ui" *ngIf="currentEndpoint">
   <div class="explorer-ui-panel">
-    <h4>URL</h4>
-    <pre *ngIf="response">GET {{ currentEndpoint }}</pre>
+    <h4>{{ currentEndpoint.summary }}</h4>
+    <p>{{ currentEndpoint.description }}</p>
+  </div>
+  <div class="explorer-ui-panel">
+    <h5>URL</h5>
+    <pre>{{ currentEndpoint.method }} {{ currentEndpoint.path }}</pre>
   </div>
   <div class="explorer-ui-panel flex-1 mt-1">
-    <h4>Response</h4>
-    <pre *ngIf="response" class="h-large">{{ formatResponse() }}</pre>
+    <h5>Response</h5>
+    <pre *ngIf="response" class="h-medium">{{ formatResponse() }}</pre>
   </div>
 </div>

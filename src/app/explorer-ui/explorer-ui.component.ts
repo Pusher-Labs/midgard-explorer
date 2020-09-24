@@ -10,7 +10,7 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./explorer-ui.component.scss'],
 })
 export class ExplorerUiComponent implements OnInit {
-  currentEndpoint: string;
+  currentEndpoint = {};
   response = null;
 
   constructor(private router: Router, private api: ApiService) {
@@ -22,13 +22,17 @@ export class ExplorerUiComponent implements OnInit {
   }
 
   async updateEndpoint(path) {
-    this.currentEndpoint = path;
+    this.currentEndpoint = await this.api.getEndpoint(path);
     this.response = await this.api.callEndpoint({ path });
+
+    console.log(this.currentEndpoint, this.response);
   }
 
   formatResponse() {
-    return JSON.stringify(this.response, null, 4).trim();
+    return JSON.stringify(this.response, null, 4);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.updateEndpoint(this.router.url);
+  }
 }

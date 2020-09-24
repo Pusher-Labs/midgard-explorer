@@ -7,15 +7,34 @@
 }
 
 .explorer-ui-panel {
+  font-family: sans-serif;
+
   h4{
-    font-weight: normal;
+    font-size: 1rem;
     padding:10px 0;
     margin:0;
   }
 
+  h5{
+    font-size: 1rem;
+    font-weight: normal;
+    padding:10px 0;
+    margin:0;
+    color: #d5d5d5;
+  }
+
   pre, code {
+    font-family: monospace;
+    font-size: 1.3rem;
     padding:0;
     margin:0;
+  }
+
+  p {
+    font-size: 1rem;
+    padding: 5px 0;
+    margin: 0;
+    color: #d5d5d5;
   }
 }
 
@@ -27,15 +46,14 @@
   padding: 15px 15px;
   border-radius: 3px;
   background: #101921;
-  font-size: 1rem;
   overflow: auto;
 }
 
 .h-small {
-  max-height: 150px;
+  max-height: 25vh;
 }
 .h-medium {
-  max-height: 250px;
+  max-height: 50vh;
 }
 .h-large {
   max-height: 75vh;
