@@ -1,0 +1,46 @@
+.explorer-ui {
+  font-size: 1.5rem;
+  font-family: monospace;
+  padding: 15px 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+.explorer-ui-panel {
+  h4{
+    font-weight: normal;
+    padding:10px 0;
+    margin:0;
+  }
+
+  pre, code {
+    padding:0;
+    margin:0;
+  }
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.explorer-ui pre {
+  padding: 15px 15px;
+  border-radius: 3px;
+  background: #101921;
+  font-size: 1rem;
+  overflow: auto;
+}
+
+.h-small {
+  max-height: 150px;
+}
+.h-medium {
+  max-height: 250px;
+}
+.h-large {
+  max-height: 75vh;
+}
+
+.mt-1 {
+  margin-top: 0.75rem;
+}

@@ -3,7 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 import { ExplorerComponent } from './explorer/explorer.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', component: ExplorerComponent },
+  {
+    path: '',
+    redirectTo: '/v1/health',
+    pathMatch: 'full',
+  },
   {
     path: ':apiVersion',
     children: [

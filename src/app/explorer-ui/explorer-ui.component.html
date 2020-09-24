@@ -1,7 +1,10 @@
-<div>
-  <span>THE UI</span>
-
-  <h5 style="font-size: 2rem; font-family: monospace">
-    {{ currentEndpoint }}
-  </h5>
+<div class="explorer-ui">
+  <div class="explorer-ui-panel">
+    <h4>URL</h4>
+    <pre *ngIf="response">GET {{ currentEndpoint }}</pre>
+  </div>
+  <div class="explorer-ui-panel flex-1 mt-1">
+    <h4>Response</h4>
+    <pre *ngIf="response" class="h-large">{{ formatResponse() }}</pre>
+  </div>
 </div>

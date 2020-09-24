@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { ExplorerComponent } from './explorer/explorer.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { TestComponent } from './test/test.component';
 import { ExplorerUiComponent } from './explorer-ui/explorer-ui.component';
 
 @NgModule({
@@ -16,7 +15,6 @@ import { ExplorerUiComponent } from './explorer-ui/explorer-ui.component';
     ExplorerComponent,
     HeaderComponent,
     FooterComponent,
-    TestComponent,
     ExplorerUiComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],

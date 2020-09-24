@@ -7,3 +7,12 @@
     flex: 1;
   }
 }
+
+@media screen and (min-width: 769px) {
+  .app-container {
+    overflow: hidden;
+    main {
+      overflow: hidden;
+    }
+  }
+}

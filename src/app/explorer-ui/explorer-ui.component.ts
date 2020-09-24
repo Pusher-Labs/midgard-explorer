@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { ApiService } from '../_services/api.service';
 
 import { filter } from 'rxjs/operators';
 
@@ -10,8 +11,9 @@ import { filter } from 'rxjs/operators';
 })
 export class ExplorerUiComponent implements OnInit {
   currentEndpoint: string;
+  response = null;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private api: ApiService) {
     this.router.events
       .pipe(filter((ev) => ev instanceof NavigationEnd))
       .subscribe((ev) => {
@@ -19,8 +21,13 @@ export class ExplorerUiComponent implements OnInit {
       });
   }
 
-  updateEndpoint(url) {
-    this.currentEndpoint = url;
+  async updateEndpoint(path) {
+    this.currentEndpoint = path;
+    this.response = await this.api.callEndpoint({ path });
+  }
+
+  formatResponse() {
+    return JSON.stringify(this.response, null, 4).trim();
   }
 
   ngOnInit() {}
