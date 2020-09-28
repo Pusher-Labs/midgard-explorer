@@ -9,11 +9,17 @@
     <span>Midgard Explorer</span>
   </div>
   <div>
-    <select>
-      <option>Chaosnet</option>
-      <option>Testnet</option>
+    <select
+      *ngIf="networks && activeNetwork"
+      (input)="handleNetworkChange($event)"
+      class="select-css"
+    >
+      <option
+        [selected]="net === activeNetwork"
+        *ngFor="let net of networkList()"
+      >
+        {{ net }}
+      </option>
     </select>
-
-
   </div>
 </header>

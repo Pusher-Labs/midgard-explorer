@@ -22,14 +22,29 @@ header {
   }
 }
 
-select {
-  border-radius: 2px;
+
+.select-css {
+  display: block;
+  font-family: monospace;
   padding: 5px 10px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  border: 1px solid #aaa;
+  border-radius: 0.2em;
   background: #394754;
   color: white;
-
 }
-
-option {
-  color: white;
+.select-css::-ms-expand {
+  display: none;
+}
+.select-css:hover {
+  border-color: #888;
+}
+.select-css:focus {
+  border-color: #aaa;
+}
+.select-css option {
+  font-weight: normal;
 }

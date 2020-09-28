@@ -7,18 +7,30 @@
     <h5>URL</h5>
     <pre>{{ currentEndpoint.method }} {{ makePathWithParams() }}</pre>
   </div>
-  <div *ngIf="currentEndpoint.params" class="explorer-ui-panel">
+  <div
+    *ngIf="currentEndpoint.params"
+    class="explorer-ui-panel"
+    style="margin-top: 10px"
+  >
     <h5>Params</h5>
     <form (ngSubmit)="submitQueries($event)">
       <div *ngFor="let p of currentEndpoint.params">
-        <app-query-input [param]="p"></app-query-input>
+        <app-query-input
+          [param]="p"
+          [value]="getValue(p)"
+          (onChange)="updateParams($event)"
+        ></app-query-input>
       </div>
-      <button (click)="submitQueries($event)">Submit</button>
+      <button (click)="submitQueries($event)" class="query-submit">
+        Submit
+      </button>
     </form>
   </div>
   <div class="explorer-ui-panel flex-1 mt-1">
     <h5>Response</h5>
-    <pre *ngIf="!loading && response" class="h-medium">{{ formatResponse() }}</pre>
+    <pre *ngIf="!loading && response" class="h-medium">{{
+      formatResponse()
+    }}</pre>
     <pre *ngIf="loading">
       Loading...
     </pre>

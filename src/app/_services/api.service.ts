@@ -7,28 +7,29 @@ import { HttpClient } from '@angular/common/http';
 const IGNORED_ENDPOINTS = [
   '/v1/doc',
   '/v1/swagger.json',
-  /* '/v1/assets', */
-  /* '/v1/history/total_volume', */
-  /* '/v1/pools/detail', */
   '/v1/stakers/{address}',
   '/v1/stakers/{address}/pools',
-  /* '/v1/txs', */
 ];
 
-const ROOT = 'http://175.41.137.209:8080';
+const DEFAULT_NETWORK = 'chaosnet';
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
+  networks = {
+    chaosnet: 'https://chaosnet-midgard.bepswap.com',
+    testnet: 'https://midgard.bepswap.com',
+  };
+  activeNetwork = 'chaosnet';
   endpoints = [];
-  //Get Node lsit
-  //https://testnet-seed.thorchain.info/node_ip_list.json
-  constructor(private http: HttpClient) {}
 
-  getNodes() {}
+  constructor(private http: HttpClient) {
+    this.activeNetwork = this.getActiveNetwork();
+  }
 
   async getEndpoint(path: string) {
-    const url = path.split("?")[0]; // Remove query params
+    const url = path.split('?')[0]; // Remove query params
+
     //Reload endpoints if empty
     if (this.endpoints.length === 0) {
       await this.getEndpoints();
@@ -39,6 +40,24 @@ export class ApiService {
         return i;
       }
     }
+  }
+
+  setActiveNetwork(network) {
+    localStorage.setItem('activeNetwork', network);
+    location.reload();
+  }
+
+  getActiveNetwork() {
+    const net = localStorage.getItem('activeNetwork');
+    if (!net) {
+      localStorage.setItem('activeNetwork', DEFAULT_NETWORK);
+      return DEFAULT_NETWORK;
+    }
+    return net;
+  }
+
+  getRoot() {
+    return this.networks[this.activeNetwork];
   }
 
   formatEndpoints(endpoints = []) {
@@ -64,16 +83,18 @@ export class ApiService {
 
   async getEndpoints() {
     const path = '/v1/swagger.json';
-    const response: any = await this.http.get(`${ROOT}${path}`).toPromise();
+    const response: any = await this.http
+      .get(`${this.getRoot()}${path}`)
+      .toPromise();
     this.endpoints = this.formatEndpoints(response.paths);
     return this.endpoints;
   }
 
   callEndpoint(opts) {
     const { path, method = 'GET' } = opts;
-    if(!path){
-      return null
+    if (!path) {
+      return null;
     }
-    return this.http.get(`${ROOT}${path}`).toPromise();
+    return this.http.get(`${this.getRoot()}${path}`).toPromise();
   }
 }
