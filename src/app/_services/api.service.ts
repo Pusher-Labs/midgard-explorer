@@ -7,12 +7,12 @@ import { HttpClient } from '@angular/common/http';
 const IGNORED_ENDPOINTS = [
   '/v1/doc',
   '/v1/swagger.json',
-  '/v1/assets',
-  '/v1/history/total_volume',
-  '/v1/pools/detail',
+  /* '/v1/assets', */
+  /* '/v1/history/total_volume', */
+  /* '/v1/pools/detail', */
   '/v1/stakers/{address}',
   '/v1/stakers/{address}/pools',
-  '/v1/txs',
+  /* '/v1/txs', */
 ];
 
 const ROOT = 'http://175.41.137.209:8080';
@@ -28,13 +28,14 @@ export class ApiService {
   getNodes() {}
 
   async getEndpoint(path: string) {
+    const url = path.split("?")[0]; // Remove query params
     //Reload endpoints if empty
     if (this.endpoints.length === 0) {
       await this.getEndpoints();
     }
 
     for (let i of this.endpoints) {
-      if (i.path === path) {
+      if (i.path === url) {
         return i;
       }
     }
@@ -70,6 +71,9 @@ export class ApiService {
 
   callEndpoint(opts) {
     const { path, method = 'GET' } = opts;
+    if(!path){
+      return null
+    }
     return this.http.get(`${ROOT}${path}`).toPromise();
   }
 }

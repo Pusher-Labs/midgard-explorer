@@ -3,6 +3,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 2px 15px;
 
   background: #2b3947;
   color: white;
@@ -19,4 +20,16 @@ header {
     font-family: monospace;
     font-size: 1.3rem;
   }
+}
+
+select {
+  border-radius: 2px;
+  padding: 5px 10px;
+  background: #394754;
+  color: white;
+
+}
+
+option {
+  color: white;
 }

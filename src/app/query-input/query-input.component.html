@@ -1,0 +1,9 @@
+<div *ngIf="param">
+    <label>{{ param.name }}</label>
+
+        <select [name]="param.name" *ngIf="param.schema.enum" (input)="updateParams($event)">
+          <option *ngFor="let opt of param.schema.enum" [selected]="opt === param.schema.default">{{ opt }}</option>
+        </select>
+        <input *ngIf="param.schema.type === 'string' && !param.schema.enum" (input)="updateParams($event)" [name]="param.name" [value]="paramMap[param.name] || ''"/>
+        <input *ngIf="param.schema.type === 'integer'" (input)="updateParams($event)" type="number" [name]="param.name" [value]="paramMap[p.name] || ''"/>
+</div>
