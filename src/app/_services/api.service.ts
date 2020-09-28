@@ -44,6 +44,9 @@ export class ApiService {
 
   setActiveNetwork(network) {
     localStorage.setItem('activeNetwork', network);
+    // @Todo hacky way. Ideally we should make any observable
+    // on the activenetwork and reload any component. But for now
+    // just reload the browser
     location.reload();
   }
 
