@@ -8,7 +8,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 export class QueryInputComponent implements OnInit {
   @Input() param;
   @Input() value;
-  @Output() onChange = new EventEmitter<any>();
+  @Output() inputChanged = new EventEmitter<any>();
 
   constructor() {}
 
@@ -16,11 +16,11 @@ export class QueryInputComponent implements OnInit {
     console.log(this.param);
   }
 
-  handleChange(event) {
-    this.onChange.emit({ event, param: this.param });
+  handleChange(event): void {
+    this.inputChanged.emit({ event, param: this.param });
   }
 
-  getPlaceholder() {
+  getPlaceholder(): string {
     if (this.param && this.param.example) {
       if (Array.isArray(this.param.example)) {
         return this.param.example[0];

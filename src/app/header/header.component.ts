@@ -16,13 +16,13 @@ export class HeaderComponent implements OnInit {
     this.networks = this.api.networks;
   }
 
-  handleNetworkChange(e) {
+  handleNetworkChange(e): void {
     const newNet = e.target.value;
     this.api.setActiveNetwork(newNet);
     this.activeNetwork = newNet;
   }
 
-  networkList() {
+  networkList(): any[] {
     return Object.keys(this.networks);
   }
 

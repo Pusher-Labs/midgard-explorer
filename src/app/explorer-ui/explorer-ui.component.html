@@ -18,7 +18,7 @@
         <app-query-input
           [param]="p"
           [value]="getValue(p)"
-          (onChange)="updateParams($event)"
+          (inputChanged)="updateParams($event)"
         ></app-query-input>
       </div>
       <button (click)="submitQueries($event)" class="query-submit">

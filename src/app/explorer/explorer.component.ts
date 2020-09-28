@@ -13,7 +13,7 @@ export class ExplorerComponent implements OnInit {
     this.updateEndpoint();
   }
 
-  async updateEndpoint() {
+  async updateEndpoint(): Promise<void> {
     this.endpoints = await this.api.getEndpoints();
   }
 

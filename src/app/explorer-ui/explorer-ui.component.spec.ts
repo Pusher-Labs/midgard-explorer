@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { ExplorerUiComponent } from './explorer-ui.component';
 
@@ -8,9 +10,9 @@ describe('ExplorerUiComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExplorerUiComponent ]
-    })
-    .compileComponents();
+      declarations: [ExplorerUiComponent],
+      imports: [RouterTestingModule, HttpClientTestingModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -31,7 +31,7 @@ export class ExplorerUiComponent implements OnInit {
       });
   }
 
-  getValue(param) {
+  getValue(param): string {
     return this.paramMap[this.router.url][param.name] || '';
   }
 
@@ -45,7 +45,7 @@ export class ExplorerUiComponent implements OnInit {
     return new URLSearchParams(currentQ);
   }
 
-  async updateEndpoint(path) {
+  async updateEndpoint(path): Promise<void> {
     this.loading = true;
     this.currentEndpoint = await this.api.getEndpoint(path);
 
@@ -62,22 +62,22 @@ export class ExplorerUiComponent implements OnInit {
     this.loading = false;
   }
 
-  formatResponse() {
+  formatResponse(): string {
     return JSON.stringify(this.response, null, 4);
   }
 
-  updateParams({ event, param }) {
+  updateParams({ event, param }): void {
     this.paramMap[this.router.url][event.target.name] = event.target.value;
   }
 
-  updateParamFromUrl(url) {
+  updateParamFromUrl(url): void {
     const params = this.searchParamsFromUrl(url);
-    for (let pair of params.entries()) {
+    for (const pair of params.entries()) {
       this.paramMap[this.router.url][pair[0]] = pair[1];
     }
   }
 
-  submitQueries(e) {
+  submitQueries(e): void {
     e.preventDefault();
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
@@ -88,7 +88,7 @@ export class ExplorerUiComponent implements OnInit {
     this.updateEndpoint(this.router.url);
   }
 
-  makePathWithParams() {
+  makePathWithParams(): string {
     if (!this.currentEndpoint) {
       return;
     }
@@ -96,7 +96,7 @@ export class ExplorerUiComponent implements OnInit {
     const params = this.searchParamsFromUrl(this.router.url);
     this.currentEndpoint.params?.forEach((p) => {
       if (p.in === 'query') {
-        let userValue = this.paramMap[this.router.url][p.name];
+        const userValue = this.paramMap[this.router.url][p.name];
         if (userValue) {
           params.set(p.name, userValue);
           hasQuery = true;
@@ -111,7 +111,7 @@ export class ExplorerUiComponent implements OnInit {
     return path;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.updateEndpoint(this.router.url);
   }
 }

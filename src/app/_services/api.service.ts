@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
-//@Todo proper types for each response, functions etc.
+// @Todo proper types for each response, functions etc.
 
-//@Todo incomplete. remove some of these when they are supported
+// @Todo incomplete. remove some of these when they are supported
 const IGNORED_ENDPOINTS = [
   '/v1/doc',
   '/v1/swagger.json',
@@ -27,22 +27,22 @@ export class ApiService {
     this.activeNetwork = this.getActiveNetwork();
   }
 
-  async getEndpoint(path: string) {
+  async getEndpoint(path: string): Promise<string> {
     const url = path.split('?')[0]; // Remove query params
 
-    //Reload endpoints if empty
+    // Reload endpoints if empty
     if (this.endpoints.length === 0) {
       await this.getEndpoints();
     }
 
-    for (let i of this.endpoints) {
+    for (const i of this.endpoints) {
       if (i.path === url) {
         return i;
       }
     }
   }
 
-  setActiveNetwork(network) {
+  setActiveNetwork(network): void {
     localStorage.setItem('activeNetwork', network);
     // @Todo hacky way. Ideally we should make any observable
     // on the activenetwork and reload any component. But for now
@@ -50,7 +50,7 @@ export class ApiService {
     location.reload();
   }
 
-  getActiveNetwork() {
+  getActiveNetwork(): string {
     const net = localStorage.getItem('activeNetwork');
     if (!net) {
       localStorage.setItem('activeNetwork', DEFAULT_NETWORK);
@@ -59,18 +59,18 @@ export class ApiService {
     return net;
   }
 
-  getRoot() {
+  getRoot(): string {
     return this.networks[this.activeNetwork];
   }
 
-  formatEndpoints(endpoints = []) {
+  formatEndpoints(endpoints = []): any[] {
     const result = [];
     Object.entries(endpoints).forEach(([path, data]) => {
       if (IGNORED_ENDPOINTS.includes(path)) {
         return;
       }
 
-      //@Todo only GET supported for now
+      // @Todo only GET supported for now
       if (data.get) {
         result.push({
           path,
@@ -84,7 +84,7 @@ export class ApiService {
     return result;
   }
 
-  async getEndpoints() {
+  async getEndpoints(): Promise<any> {
     const path = '/v1/swagger.json';
     const response: any = await this.http
       .get(`${this.getRoot()}${path}`)
@@ -93,7 +93,7 @@ export class ApiService {
     return this.endpoints;
   }
 
-  callEndpoint(opts) {
+  callEndpoint(opts): Promise<any> {
     const { path, method = 'GET' } = opts;
     if (!path) {
       return null;
