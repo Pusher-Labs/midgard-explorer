@@ -8,6 +8,12 @@ const routes: Routes = [
     redirectTo: '/v1/health',
     pathMatch: 'full',
   },
+
+  // Override routes for custom paths
+  {
+    path: 'v1/stakers/:address',
+    component: ExplorerComponent,
+  },
   {
     path: '**',
     component: ExplorerComponent,

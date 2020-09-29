@@ -12,9 +12,7 @@ export class QueryInputComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    console.log(this.param);
-  }
+  ngOnInit(): void {}
 
   handleChange(event): void {
     this.inputChanged.emit({ event, param: this.param });

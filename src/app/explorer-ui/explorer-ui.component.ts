@@ -36,10 +36,29 @@ export class ExplorerUiComponent implements OnInit {
   }
 
   getValue(param): string {
+    let result = null;
     if (param.in === 'path') {
-      return this.pathMap[this.router.url][param.name] || '';
+      result = this.pathMap[this.router.url][param.name];
+      if (!result) {
+        if (
+          this.currentEndpoint.customParams &&
+          this.currentEndpoint.customParams[param.name]
+        ) {
+          result = this.currentEndpoint.customParams[param.name];
+        }
+      }
+    } else {
+      result = this.paramMap[this.router.url][param.name];
     }
-    return this.paramMap[this.router.url][param.name] || '';
+
+    if (!result) {
+      result = '';
+    }
+    return result;
+  }
+
+  shouldShowLinks(): boolean {
+    return !this.loading && this.response && Array.isArray(this.response);
   }
 
   searchParamsFromUrl(url): any {
@@ -54,7 +73,10 @@ export class ExplorerUiComponent implements OnInit {
 
   async updateEndpoint(path): Promise<void> {
     this.loading = true;
-    this.currentEndpoint = await this.api.getEndpoint(path);
+    this.currentEndpoint = await this.api.getEndpoint(
+      path,
+      this.activatedRoute
+    );
 
     const callingEndpoint = this.makePathWithParams();
     try {
@@ -93,11 +115,11 @@ export class ExplorerUiComponent implements OnInit {
     e.preventDefault();
     let newUrl = this.router.url;
 
-    // Object.entries(this.pathMap[this.router.url]).forEach(([key, value]) => {
-    //   newUrl = newUrl.replace(`%7B${key}%7D`, value);
-    // });
+    Object.entries(this.pathMap[this.router.url]).forEach(([key, value]) => {
+      newUrl = newUrl.replace(`%7B${key}%7D`, value);
+    });
 
-    this.router.navigate([], {
+    this.router.navigate([newUrl], {
       queryParams: this.paramMap[this.router.url],
       queryParamsHandling: 'merge',
     });
@@ -130,6 +152,14 @@ export class ExplorerUiComponent implements OnInit {
 
     if (hasQuery) {
       path += `?${params.toString()}`;
+    }
+
+    if (this.currentEndpoint.customParams) {
+      Object.entries(this.currentEndpoint.customParams).forEach(
+        ([key, value]) => {
+          path = path.replace(`{${key}}`, value);
+        }
+      );
     }
     return path;
   }

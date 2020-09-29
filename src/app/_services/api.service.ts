@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 // @Todo proper types for each response, functions etc.
 
@@ -21,7 +22,7 @@ export class ApiService {
     this.activeNetwork = this.getActiveNetwork();
   }
 
-  async getEndpoint(path: string): Promise<string> {
+  async getEndpoint(path: string, acR: ActivatedRoute): Promise<string> {
     let url = decodeURI(path);
     url = url.split('?')[0]; // Remove query params
 
@@ -31,8 +32,23 @@ export class ApiService {
     }
 
     for (const i of this.endpoints) {
-      if (i.path === url) {
+      let searchPath = i.path;
+      if (searchPath === url) {
         return i;
+      } else {
+        // If unmatched try replacing the params
+        const addr = acR.snapshot.paramMap.get('address');
+        if (addr) {
+          searchPath = searchPath.replace(`{address}`, addr);
+        }
+        if (searchPath === url) {
+          return {
+            ...i,
+            customParams: {
+              address: addr,
+            },
+          };
+        }
       }
     }
     // @Todo show endpoint not found component
@@ -86,7 +102,6 @@ export class ApiService {
       .get(`${this.getRoot()}${path}`)
       .toPromise();
     this.endpoints = this.formatEndpoints(response.paths);
-    console.log('endpoints', response);
     return this.endpoints;
   }
 

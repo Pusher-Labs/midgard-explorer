@@ -10,6 +10,7 @@ import { FooterComponent } from './footer/footer.component';
 import { ExplorerUiComponent } from './explorer-ui/explorer-ui.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { QueryInputComponent } from './query-input/query-input.component';
+import { ResponseLinksComponent } from './response-links/response-links.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { QueryInputComponent } from './query-input/query-input.component';
     FooterComponent,
     ExplorerUiComponent,
     QueryInputComponent,
+    ResponseLinksComponent,
   ],
   imports: [
     BrowserModule,
