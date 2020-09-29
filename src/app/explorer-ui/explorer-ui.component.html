@@ -29,8 +29,6 @@
   <div class="explorer-ui-panel flex-1 mt-1">
     <h5>Response</h5>
     <pre *ngIf="!loading && response" class="">{{ formatResponse() }}</pre>
-    <pre *ngIf="loading">
-      Loading...
-    </pre>
+    <pre *ngIf="loading">Loading...</pre>
   </div>
 </div>
