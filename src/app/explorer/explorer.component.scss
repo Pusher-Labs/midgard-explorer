@@ -56,6 +56,12 @@
   }
 }
 
+.endpoint.is-active {
+  background: #101921;
+  color: white;
+  border-right: 2px solid #101921;
+}
+
 .explorer main {
   flex: 1;
   background: #394754;

@@ -21,7 +21,11 @@
           (inputChanged)="updateParams($event)"
         ></app-query-input>
       </div>
-      <button (click)="submitQueries($event)" class="query-submit">
+      <button
+        [disabled]="loading"
+        (click)="submitQueries($event)"
+        class="query-submit"
+      >
         Submit
       </button>
     </form>

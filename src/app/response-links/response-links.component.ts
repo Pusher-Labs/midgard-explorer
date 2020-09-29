@@ -10,6 +10,9 @@ export class ResponseLinksComponent implements OnInit {
   @Input() response;
   formattedResponse = [];
 
+  // @Todo we can do some more clever stuff in future for this.
+  // For now I just manually create custom response link stuff here.
+  // Since swagger doesn't give any HATEOS kind of stuff atm.
   nextMap = {
     '/v1/pools': (item) => {
       const routerLink = `/v1/pools/detail`;
@@ -28,17 +31,11 @@ export class ResponseLinksComponent implements OnInit {
     },
     '/v1/stakers': (item) => {
       const routerLink = `/v1/stakers/${item}`;
-      const queryParams = {};
-      const urlP = new URLSearchParams();
-      Object.entries(queryParams).forEach(([key, value]) => {
-        urlP.set(key, value);
-      });
 
       return {
         routerLink,
-        queryParams,
         label: item,
-        prettyUrl: `${routerLink}${urlP.toString()}`,
+        prettyUrl: routerLink,
       };
     },
   };

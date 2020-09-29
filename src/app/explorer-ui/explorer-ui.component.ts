@@ -16,6 +16,18 @@ export class ExplorerUiComponent implements OnInit {
   paramMap = {};
   pathMap = {};
 
+  // friendly overrides in case of no data
+  friendOverrides = {
+    offset: 1,
+    limit: 10,
+    asset: 'BNB.BNB',
+    interval: '5min',
+    from: '1501351773',
+    to: '1601351773',
+    view: 'simple',
+    address: 'bnb1rv89nkw2x5ksvhf6jtqwqpke4qhh7jmudpvqmj',
+  };
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -36,7 +48,7 @@ export class ExplorerUiComponent implements OnInit {
   }
 
   getValue(param): string {
-    let result = null;
+    let result = this.friendOverrides[param.name];
     if (param.in === 'path') {
       result = this.pathMap[this.router.url][param.name];
       if (!result) {
@@ -46,9 +58,15 @@ export class ExplorerUiComponent implements OnInit {
         ) {
           result = this.currentEndpoint.customParams[param.name];
         }
+
+        if (!result) {
+          result = this.friendOverrides[param.name];
+        }
       }
     } else {
-      result = this.paramMap[this.router.url][param.name];
+      if (this.paramMap[this.router.url][param.name]) {
+        result = this.paramMap[this.router.url][param.name];
+      }
     }
 
     if (!result) {
@@ -113,13 +131,20 @@ export class ExplorerUiComponent implements OnInit {
 
   submitQueries(e): void {
     e.preventDefault();
-    let newUrl = this.router.url;
+    const pathArr = [];
 
-    Object.entries(this.pathMap[this.router.url]).forEach(([key, value]) => {
-      newUrl = newUrl.replace(`%7B${key}%7D`, value);
-    });
+    //Stakers have weird curly braces so should not be replaced.
+    if (!this.router.url.startsWith('/v1/stakers')) {
+      let newUrl = this.router.url.split('?')[0];
 
-    this.router.navigate([newUrl], {
+      Object.entries(this.pathMap[this.router.url]).forEach(([key, value]) => {
+        newUrl = newUrl.replace(`%7B${key}%7D`, value);
+      });
+
+      pathArr.push(newUrl);
+    }
+
+    this.router.navigate(pathArr, {
       queryParams: this.paramMap[this.router.url],
       queryParamsHandling: 'merge',
     });
@@ -136,14 +161,24 @@ export class ExplorerUiComponent implements OnInit {
     const params = this.searchParamsFromUrl(this.router.url);
     this.currentEndpoint.params?.forEach((p) => {
       if (p.in === 'query') {
-        const userValue = this.paramMap[this.router.url][p.name];
+        let userValue = this.paramMap[this.router.url][p.name];
+
+        // Doing some user friendly overrides in case of no data
+        if (!userValue) {
+          userValue = this.friendOverrides[p.name];
+        }
+
         if (userValue) {
           params.set(p.name, userValue);
           hasQuery = true;
         }
       }
       if (p.in === 'path') {
-        const userPathValue = this.pathMap[this.router.url][p.name];
+        let userPathValue = this.pathMap[this.router.url][p.name];
+        if (!userPathValue) {
+          userPathValue = this.friendOverrides[p.name];
+        }
+
         if (userPathValue) {
           path = path.replace(`{${p.name}}`, userPathValue);
         }
