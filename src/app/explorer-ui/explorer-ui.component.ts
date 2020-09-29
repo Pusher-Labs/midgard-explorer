@@ -137,9 +137,11 @@ export class ExplorerUiComponent implements OnInit {
     if (!this.router.url.startsWith('/v1/stakers')) {
       let newUrl = this.router.url.split('?')[0];
 
-      Object.entries(this.pathMap[this.router.url]).forEach(([key, value]) => {
-        newUrl = newUrl.replace(`%7B${key}%7D`, value);
-      });
+      Object.entries(this.pathMap[this.router.url]).forEach(
+        ([key, value]: any[]) => {
+          newUrl = newUrl.replace(`%7B${key}%7D`, value);
+        }
+      );
 
       pathArr.push(newUrl);
     }
