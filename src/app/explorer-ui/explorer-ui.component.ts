@@ -14,6 +14,7 @@ export class ExplorerUiComponent implements OnInit {
   response = null;
   loading = false;
   paramMap = {};
+  pathMap = {};
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -26,12 +27,18 @@ export class ExplorerUiComponent implements OnInit {
         if (!this.paramMap[this.router.url]) {
           this.paramMap[this.router.url] = {};
         }
+        if (!this.pathMap[this.router.url]) {
+          this.pathMap[this.router.url] = {};
+        }
         this.updateEndpoint(this.router.url);
         this.updateParamFromUrl(this.router.url);
       });
   }
 
   getValue(param): string {
+    if (param.in === 'path') {
+      return this.pathMap[this.router.url][param.name] || '';
+    }
     return this.paramMap[this.router.url][param.name] || '';
   }
 
@@ -49,9 +56,10 @@ export class ExplorerUiComponent implements OnInit {
     this.loading = true;
     this.currentEndpoint = await this.api.getEndpoint(path);
 
+    const callingEndpoint = this.makePathWithParams();
     try {
       this.response = await this.api.callEndpoint({
-        path: this.makePathWithParams(),
+        path: callingEndpoint,
       });
     } catch (err) {
       console.error('Call endpoint err:', err.message);
@@ -67,7 +75,11 @@ export class ExplorerUiComponent implements OnInit {
   }
 
   updateParams({ event, param }): void {
-    this.paramMap[this.router.url][event.target.name] = event.target.value;
+    if (param.in === 'path') {
+      this.pathMap[this.router.url][event.target.name] = event.target.value;
+    } else {
+      this.paramMap[this.router.url][event.target.name] = event.target.value;
+    }
   }
 
   updateParamFromUrl(url): void {
@@ -79,8 +91,13 @@ export class ExplorerUiComponent implements OnInit {
 
   submitQueries(e): void {
     e.preventDefault();
+    let newUrl = this.router.url;
+
+    // Object.entries(this.pathMap[this.router.url]).forEach(([key, value]) => {
+    //   newUrl = newUrl.replace(`%7B${key}%7D`, value);
+    // });
+
     this.router.navigate([], {
-      relativeTo: this.activatedRoute,
       queryParams: this.paramMap[this.router.url],
       queryParamsHandling: 'merge',
     });
@@ -92,6 +109,7 @@ export class ExplorerUiComponent implements OnInit {
     if (!this.currentEndpoint) {
       return;
     }
+    let path = this.currentEndpoint.path;
     let hasQuery = false;
     const params = this.searchParamsFromUrl(this.router.url);
     this.currentEndpoint.params?.forEach((p) => {
@@ -102,9 +120,14 @@ export class ExplorerUiComponent implements OnInit {
           hasQuery = true;
         }
       }
+      if (p.in === 'path') {
+        const userPathValue = this.pathMap[this.router.url][p.name];
+        if (userPathValue) {
+          path = path.replace(`{${p.name}}`, userPathValue);
+        }
+      }
     });
 
-    let path = this.currentEndpoint.path;
     if (hasQuery) {
       path += `?${params.toString()}`;
     }

@@ -9,19 +9,8 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: ':apiVersion',
-    children: [
-      {
-        path: ':apiEndpoint',
-        component: ExplorerComponent,
-        children: [
-          {
-            path: ':apiEndpoint2',
-            component: ExplorerComponent,
-          },
-        ],
-      },
-    ],
+    path: '**',
+    component: ExplorerComponent,
   },
 ];
 

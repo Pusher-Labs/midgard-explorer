@@ -3,13 +3,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 
 // @Todo proper types for each response, functions etc.
 
-// @Todo incomplete. remove some of these when they are supported
-const IGNORED_ENDPOINTS = [
-  '/v1/doc',
-  '/v1/swagger.json',
-  '/v1/stakers/{address}',
-  '/v1/stakers/{address}/pools',
-];
+const IGNORED_ENDPOINTS = ['/v1/doc', '/v1/swagger.json'];
 
 const DEFAULT_NETWORK = 'chaosnet';
 @Injectable({
@@ -28,7 +22,8 @@ export class ApiService {
   }
 
   async getEndpoint(path: string): Promise<string> {
-    const url = path.split('?')[0]; // Remove query params
+    let url = decodeURI(path);
+    url = url.split('?')[0]; // Remove query params
 
     // Reload endpoints if empty
     if (this.endpoints.length === 0) {
@@ -40,6 +35,7 @@ export class ApiService {
         return i;
       }
     }
+    // @Todo show endpoint not found component
   }
 
   setActiveNetwork(network): void {
@@ -90,6 +86,7 @@ export class ApiService {
       .get(`${this.getRoot()}${path}`)
       .toPromise();
     this.endpoints = this.formatEndpoints(response.paths);
+    console.log('endpoints', response);
     return this.endpoints;
   }
 
