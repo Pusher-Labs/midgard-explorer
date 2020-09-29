@@ -34,7 +34,7 @@ export class ResponseLinksComponent implements OnInit {
 
       return {
         routerLink,
-        label: item,
+        label: `${item.substring(0, 10)}...`,
         prettyUrl: routerLink,
       };
     },

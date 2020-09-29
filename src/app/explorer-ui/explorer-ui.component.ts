@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../_services/api.service';
 
@@ -9,12 +9,13 @@ import { filter } from 'rxjs/operators';
   templateUrl: './explorer-ui.component.html',
   styleUrls: ['./explorer-ui.component.scss'],
 })
-export class ExplorerUiComponent implements OnInit {
+export class ExplorerUiComponent implements OnInit, OnDestroy {
   currentEndpoint = null;
   response = null;
   loading = false;
   paramMap = {};
   pathMap = {};
+  subs = [];
 
   // friendly overrides in case of no data
   friendOverrides = {
@@ -33,7 +34,7 @@ export class ExplorerUiComponent implements OnInit {
     private router: Router,
     private api: ApiService
   ) {
-    this.router.events
+    const sub = this.router.events
       .pipe(filter((ev) => ev instanceof NavigationEnd))
       .subscribe((ev) => {
         if (!this.paramMap[this.router.url]) {
@@ -43,8 +44,9 @@ export class ExplorerUiComponent implements OnInit {
           this.pathMap[this.router.url] = {};
         }
         this.updateEndpoint(this.router.url);
-        this.updateParamFromUrl(this.router.url);
+        // this.updateParamFromUrl(this.router.url);
       });
+    this.subs.push(sub);
   }
 
   getValue(param): string {
@@ -76,7 +78,11 @@ export class ExplorerUiComponent implements OnInit {
   }
 
   shouldShowLinks(): boolean {
-    return !this.loading && this.response && Array.isArray(this.response);
+    // only pools and stakers support links atm.
+    const supportedLinks = ['/v1/pools', '/v1/stakers'];
+    const isSupported = false;
+    const path = this.router.url.split('?')[0];
+    return !this.loading && this.response && supportedLinks.includes(path);
   }
 
   searchParamsFromUrl(url): any {
@@ -201,7 +207,9 @@ export class ExplorerUiComponent implements OnInit {
     return path;
   }
 
-  ngOnInit(): void {
-    this.updateEndpoint(this.router.url);
+  ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.subs.forEach((sub) => sub.unsubscribe());
   }
 }
