@@ -26,7 +26,7 @@ export class ResponseLinksComponent implements OnInit {
         routerLink,
         queryParams,
         label: item,
-        prettyUrl: `${routerLink}${urlP.toString()}`,
+        prettyUrl: `${routerLink}?${urlP.toString()}`,
       };
     },
     '/v1/stakers': (item) => {
